@@ -18,8 +18,8 @@ Pointers provide machine independent address arithmetic.
 
 ## Writing the First Program
 
-First program for a programmşing language:
-```[c]
+Here’s a simple C program that prints "Hello, World!" to the console:
+```c
 #include <stdio.h>
 
 int main(void) {
@@ -27,15 +27,22 @@ int main(void) {
     return 0;
 }
 ```
+- `#include <stdio.h>`: This line tells the compiler to include the standard input/output library, which provides functions like `printf`.
+- `int main() { ... }`: The main function is the **entry point of a C program**. The code inside this function is executed when the program runs.
+- `printf("Hello, World!\n");`: This line prints the string "Hello, World!" to the console. The `\n` is a newline character, which moves the cursor to the next line after printing.
+- `return 0;`: This line ends the main function and returns `0` to the operating system, indicating that **the program executed successfully**.
 
 This program can be compiled with `gcc` as given below:
-```[shell]
+```shell
 gcc hello.c -o hello
 ./hello
 ```
+- `gcc` is the **GNU Compiler Collection**, a powerful tool used to compile C programs. 
+- `hello.c` is the source file.
+- `-o hello` specifies the output file name (in this case, `hello`).
 
-The output can be seen in the terminal:
-```[shell]
+The output can be seen in the terminal as below:
+```shell
 >>> Hello, world!
 ```
 
