@@ -1,8 +1,15 @@
 #include <stdio.h>
 
-#define MSG "Hello, world!"
+#define NAME "Bilgehan"
+
+/* Function Declaration */
+void sayHi(char name[] /*String*/ );
 
 int main() {
-    printf(MSG);
+    sayHi(NAME);
     return 0;
+}
+
+void sayHi(char name[]) {
+    printf("Hi, %s!\n", name);
 }
