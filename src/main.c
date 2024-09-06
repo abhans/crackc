@@ -75,7 +75,7 @@ void printBlock(char block, int nrow, int ncol) {
  ```
  */
 void printByte(int type) {
-    const unsigned int sizes[] = {
+    const size_t sizes[] = {
         sizeof(int),
         sizeof(float),
         sizeof(double),
