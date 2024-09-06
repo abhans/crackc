@@ -7,4 +7,4 @@ This repository is created to store my practices on C language including various
 You can find the main scripts at `src` directory.
 
 I've also included notes on my studying sessions at `docs` that includes notes on the first chapter of the book titled `The C Programming Language`.
-For the rest of the notes, [contact me](ab.serces@gmail.com). I will consider it.
+For the rest of the notes, contact me. I will consider it.
