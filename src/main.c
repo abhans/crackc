@@ -14,7 +14,7 @@ enum Type {
     CHAR,
     LONG,
     SHORT
-};
+}
 
 /*Declarations*/
 
