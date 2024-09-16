@@ -1,25 +1,37 @@
 #include <iostream>
+#include <string>
+
+enum MealType {
+	DEFAULT,
+	VEGETERIAN,
+	VEGAN,
+	LOW_FAT
+};
+
+struct Passenger
+{
+	std::string name;
+	bool isPassennger;
+	MealType meal;
+	long ID;
+
+};
 
 int main() {
-	
-	int X[] = {1, 0, 0, 1, 0, 0, 1};
 
-	int age = 23;
-	int *ageP = &age;
+	Passenger person = {
+		"John Doe",
+		true,
+		DEFAULT,
+		1334988008
+	};
 	
-	/* &age = ageP */
-	/* age = *ageP */
-
-	// std::cout << age << std::endl;
-	// std::cout << &age << std::endl;
-
-	// std::cout << *ageP << std::endl;
-	// std::cout << ageP << std::endl;
-	
-	std::cout << &X[0] << std::endl;
-	std::cout << &X[1] << std::endl;
-	std::cout << &X[2] << std::endl;
-	std::cout << &X[3] << std::endl;
-	
-	return 0;
+	if (person.isPassennger) {
+		std::cout << "Hello, " << person.name << std::endl;
+		std::cout << "ID: " << person.ID << std::endl;
+		std::cout << "Meal Preference: " << person.meal << std::endl;
+		return 0;
+	}	
+	std::cout << "NOT a passenger!" << std::endl;
+	return -1;
 }
