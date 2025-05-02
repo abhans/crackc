@@ -1,4 +1,4 @@
-# C-practices
+# crackc
 I've used the C programming language several times on my projects (for embedded and FPGA programming courses that I've taken)
 
 I always wanted to explore C deeper so that I can become a better programmer and also a better engineer.
