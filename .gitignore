@@ -54,5 +54,17 @@ dkms.conf
 # VS Code folders
 *.vscode
 
-# Build Files
-**/build/
+/CMakeUserPresets.json
+
+# Common build directories
+/build*/
+
+# CI jobs that run in symlinked trees produce these artifacts.
+/real_work/
+/work
+
+# Python compile output.
+*.pyc
+
+# See Utilities/Sphinx/tutorial_archive.cmake
+/Help/_generated

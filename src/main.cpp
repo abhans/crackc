@@ -1,5 +1,9 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <string>
+
+/* OpenCV Version */
+const std::string OPENCV_VERSION = cv::getVersionString();
 
 /**
  * @class Printable
@@ -123,6 +127,7 @@ public:
 };
 
 int main() {
+    std::cout << "OpenCV: " << OPENCV_VERSION << std::endl;
     CameraSystem cameraSystem;
     cameraSystem.captureAndProcess();
     return 0;
