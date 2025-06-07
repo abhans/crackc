@@ -129,6 +129,43 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
+#=============================================================================
+# Target rules for targets named aruco
+
+# Build rule for target.
+aruco: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 aruco
+.PHONY : aruco
+
+# fast build rule for target.
+aruco/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/build
+.PHONY : aruco/fast
+
+src/aruco.o: src/aruco.cpp.o
+.PHONY : src/aruco.o
+
+# target to build an object file
+src/aruco.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/src/aruco.cpp.o
+.PHONY : src/aruco.cpp.o
+
+src/aruco.i: src/aruco.cpp.i
+.PHONY : src/aruco.i
+
+# target to preprocess a source file
+src/aruco.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/src/aruco.cpp.i
+.PHONY : src/aruco.cpp.i
+
+src/aruco.s: src/aruco.cpp.s
+.PHONY : src/aruco.s
+
+# target to generate assembly for a file
+src/aruco.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/src/aruco.cpp.s
+.PHONY : src/aruco.cpp.s
+
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
 
@@ -161,7 +198,11 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... aruco"
 	@echo "... main"
+	@echo "... src/aruco.o"
+	@echo "... src/aruco.i"
+	@echo "... src/aruco.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

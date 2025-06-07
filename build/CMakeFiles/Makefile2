@@ -64,10 +64,12 @@ CMAKE_BINARY_DIR = /home/abhans/crackc/build
 
 # The main recursive "all" target.
 all: CMakeFiles/main.dir/all
+all: CMakeFiles/aruco.dir/all
 .PHONY : all
 
 # The main recursive "codegen" target.
 codegen: CMakeFiles/main.dir/codegen
+codegen: CMakeFiles/aruco.dir/codegen
 .PHONY : codegen
 
 # The main recursive "preinstall" target.
@@ -76,6 +78,7 @@ preinstall:
 
 # The main recursive "clean" target.
 clean: CMakeFiles/main.dir/clean
+clean: CMakeFiles/aruco.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -85,7 +88,7 @@ clean: CMakeFiles/main.dir/clean
 CMakeFiles/main.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/abhans/crackc/build/CMakeFiles --progress-num=1,2 "Built target main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/abhans/crackc/build/CMakeFiles --progress-num=3,4 "Built target main"
 .PHONY : CMakeFiles/main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -102,13 +105,45 @@ main: CMakeFiles/main.dir/rule
 # codegen rule for target.
 CMakeFiles/main.dir/codegen:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/codegen
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/abhans/crackc/build/CMakeFiles --progress-num=1,2 "Finished codegen for target main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/abhans/crackc/build/CMakeFiles --progress-num=3,4 "Finished codegen for target main"
 .PHONY : CMakeFiles/main.dir/codegen
 
 # clean rule for target.
 CMakeFiles/main.dir/clean:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/clean
 .PHONY : CMakeFiles/main.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/aruco.dir
+
+# All Build rule for target.
+CMakeFiles/aruco.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/abhans/crackc/build/CMakeFiles --progress-num=1,2 "Built target aruco"
+.PHONY : CMakeFiles/aruco.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/aruco.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhans/crackc/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/aruco.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/abhans/crackc/build/CMakeFiles 0
+.PHONY : CMakeFiles/aruco.dir/rule
+
+# Convenience name for target.
+aruco: CMakeFiles/aruco.dir/rule
+.PHONY : aruco
+
+# codegen rule for target.
+CMakeFiles/aruco.dir/codegen:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/codegen
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/abhans/crackc/build/CMakeFiles --progress-num=1,2 "Finished codegen for target aruco"
+.PHONY : CMakeFiles/aruco.dir/codegen
+
+# clean rule for target.
+CMakeFiles/aruco.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/clean
+.PHONY : CMakeFiles/aruco.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
