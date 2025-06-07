@@ -4,6 +4,7 @@
 
 // Function Signatures
 cv::Mat generateArucoMarker(std::string path, cv::aruco::Dictionary arucoDict, int id, int size);
+cv::Mat detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict);
 
 // Constants
 const cv::aruco::Dictionary ARUCO_DICT = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
@@ -17,6 +18,13 @@ int main() {
         cv::Mat marker = generateArucoMarker(path, ARUCO_DICT, id, 250);
     }
     std::cout << "Marker generation is done." << std::endl;
+    
+    // Read the Demo image for detection
+    cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_GRAYSCALE);
+
+    cv::Mat res = detectArucoMarkers(img, ARUCO_DICT);
+    cv::imwrite("images/arucodemo_results.jpg", res);
+    
     return 0;
 }
 
@@ -50,4 +58,51 @@ cv::Mat generateArucoMarker(std::string path, cv::aruco::Dictionary arucoDict, i
     std::cout << "Marker saved to: " << outPath << '\n';
     
     return marker;
+}
+
+/**
+ * @brief Detects ArUco markers in the input image.
+ *
+ * If no dictionary is provided, defaults to DICT_6X6_250. Uses default
+ * DetectorParameters for detection.
+ *
+ * @param[in] img       The input image (cv::Mat) in which to detect markers.
+ * @param[in,out] arucoDict
+ *     The ArUco dictionary to use. If empty, it will be replaced with the
+ *     default DICT_6X6_250 dictionary.
+ *
+ * @return cv::Mat
+ *     The input image is returned directly. Note: no markers are drawn on it
+ *     and no additional information is returned. Use of markerCorners and
+ *     markerIds should be adapted if detection results are needed.
+ *
+ * @note Currently, the function logs to stdout/stderr whether detection
+ *       succeeded or failed, but does not annotate the image or raise on
+ *       failure.
+ */
+cv::Mat detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict) {
+    cv::Mat res;
+    std::vector<int> markerIds;
+    std::vector<std::vector<cv::Point2f>> markerCorners, rejectedCandidates;
+    // If no dictionary is given, get default
+    if (arucoDict.bytesList.empty()) {
+        arucoDict = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
+    }
+    // Parameters for the detector
+    cv::aruco::DetectorParameters detectorParams = cv::aruco::DetectorParameters();
+    
+    // ArUco Detector
+    cv::aruco::ArucoDetector detector(arucoDict, detectorParams);
+    detector.detectMarkers(img, markerCorners, markerIds, rejectedCandidates);
+
+    if (markerCorners.empty()) {
+        std::cerr << "No marker is detected!" << std::endl;
+        return res;
+    }
+
+    std::cout << "Marker/s are detected" << std::endl;
+    res = img.clone();
+    cv::aruco::drawDetectedMarkers(res, markerCorners, markerIds);
+
+    return res;
 }
