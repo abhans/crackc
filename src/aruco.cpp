@@ -4,26 +4,30 @@
 
 // Function Signatures
 cv::Mat generateArucoMarker(std::string path, cv::aruco::Dictionary arucoDict, int id, int size);
-cv::Mat detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict);
+std::vector<int> detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict);
 
 // Constants
 const cv::aruco::Dictionary ARUCO_DICT = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
 
 int main() {
-    std::string path = "images";
-    std::array<int, 10> markerIds {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    // std::string path = "images";
+    // std::array<int, 10> markerIds {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     
-    // Generate markers
-    for (const auto& id : markerIds) {
-        cv::Mat marker = generateArucoMarker(path, ARUCO_DICT, id, 250);
-    }
-    std::cout << "Marker generation is done." << std::endl;
+    // // Generate markers
+    // for (const auto& id : markerIds) {
+    //     cv::Mat marker = generateArucoMarker(path, ARUCO_DICT, id, 250);
+    // }
+    // std::cout << "Marker generation is done." << std::endl;
     
     // Read the Demo image for detection
     cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_GRAYSCALE);
 
-    cv::Mat res = detectArucoMarkers(img, ARUCO_DICT);
-    cv::imwrite("images/arucodemo_results.jpg", res);
+    std::vector<int> detectedIds = detectArucoMarkers(img, ARUCO_DICT);
+    
+    std::cout << "Detected IDs:" << '\n';
+    for (const auto& id : detectedIds) {
+        std::cout << "> " << id << '\n';
+    }
     
     return 0;
 }
@@ -71,17 +75,14 @@ cv::Mat generateArucoMarker(std::string path, cv::aruco::Dictionary arucoDict, i
  *     The ArUco dictionary to use. If empty, it will be replaced with the
  *     default DICT_6X6_250 dictionary.
  *
- * @return cv::Mat
- *     The input image is returned directly. Note: no markers are drawn on it
- *     and no additional information is returned. Use of markerCorners and
- *     markerIds should be adapted if detection results are needed.
+ * @return std::vector<int>
+ *     ID of the detected markers are returned in the form of an array.
  *
  * @note Currently, the function logs to stdout/stderr whether detection
  *       succeeded or failed, but does not annotate the image or raise on
  *       failure.
  */
-cv::Mat detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict) {
-    cv::Mat res;
+std::vector<int> detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict) {
     std::vector<int> markerIds;
     std::vector<std::vector<cv::Point2f>> markerCorners, rejectedCandidates;
     // If no dictionary is given, get default
@@ -97,12 +98,10 @@ cv::Mat detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict) {
 
     if (markerCorners.empty()) {
         std::cerr << "No marker is detected!" << std::endl;
-        return res;
+        return img;
     }
 
     std::cout << "Marker/s are detected" << std::endl;
-    res = img.clone();
-    cv::aruco::drawDetectedMarkers(res, markerCorners, markerIds);
 
-    return res;
+    return markerIds;
 }

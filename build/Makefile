@@ -117,19 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named main
-
-# Build rule for target.
-main: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 main
-.PHONY : main
-
-# fast build rule for target.
-main/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/build
-.PHONY : main/fast
-
-#=============================================================================
 # Target rules for targets named aruco
 
 # Build rule for target.
@@ -141,6 +128,119 @@ aruco: cmake_check_build_system
 aruco/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/build
 .PHONY : aruco/fast
+
+#=============================================================================
+# Target rules for targets named qt
+
+# Build rule for target.
+qt: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 qt
+.PHONY : qt
+
+# fast build rule for target.
+qt/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/build
+.PHONY : qt/fast
+
+#=============================================================================
+# Target rules for targets named aruco_autogen_timestamp_deps
+
+# Build rule for target.
+aruco_autogen_timestamp_deps: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 aruco_autogen_timestamp_deps
+.PHONY : aruco_autogen_timestamp_deps
+
+# fast build rule for target.
+aruco_autogen_timestamp_deps/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco_autogen_timestamp_deps.dir/build.make CMakeFiles/aruco_autogen_timestamp_deps.dir/build
+.PHONY : aruco_autogen_timestamp_deps/fast
+
+#=============================================================================
+# Target rules for targets named aruco_autogen
+
+# Build rule for target.
+aruco_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 aruco_autogen
+.PHONY : aruco_autogen
+
+# fast build rule for target.
+aruco_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco_autogen.dir/build.make CMakeFiles/aruco_autogen.dir/build
+.PHONY : aruco_autogen/fast
+
+#=============================================================================
+# Target rules for targets named qt_autogen_timestamp_deps
+
+# Build rule for target.
+qt_autogen_timestamp_deps: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 qt_autogen_timestamp_deps
+.PHONY : qt_autogen_timestamp_deps
+
+# fast build rule for target.
+qt_autogen_timestamp_deps/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt_autogen_timestamp_deps.dir/build.make CMakeFiles/qt_autogen_timestamp_deps.dir/build
+.PHONY : qt_autogen_timestamp_deps/fast
+
+#=============================================================================
+# Target rules for targets named qt_autogen
+
+# Build rule for target.
+qt_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 qt_autogen
+.PHONY : qt_autogen
+
+# fast build rule for target.
+qt_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt_autogen.dir/build.make CMakeFiles/qt_autogen.dir/build
+.PHONY : qt_autogen/fast
+
+aruco_autogen/mocs_compilation.o: aruco_autogen/mocs_compilation.cpp.o
+.PHONY : aruco_autogen/mocs_compilation.o
+
+# target to build an object file
+aruco_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/aruco_autogen/mocs_compilation.cpp.o
+.PHONY : aruco_autogen/mocs_compilation.cpp.o
+
+aruco_autogen/mocs_compilation.i: aruco_autogen/mocs_compilation.cpp.i
+.PHONY : aruco_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+aruco_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/aruco_autogen/mocs_compilation.cpp.i
+.PHONY : aruco_autogen/mocs_compilation.cpp.i
+
+aruco_autogen/mocs_compilation.s: aruco_autogen/mocs_compilation.cpp.s
+.PHONY : aruco_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+aruco_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/aruco_autogen/mocs_compilation.cpp.s
+.PHONY : aruco_autogen/mocs_compilation.cpp.s
+
+qt_autogen/mocs_compilation.o: qt_autogen/mocs_compilation.cpp.o
+.PHONY : qt_autogen/mocs_compilation.o
+
+# target to build an object file
+qt_autogen/mocs_compilation.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/qt_autogen/mocs_compilation.cpp.o
+.PHONY : qt_autogen/mocs_compilation.cpp.o
+
+qt_autogen/mocs_compilation.i: qt_autogen/mocs_compilation.cpp.i
+.PHONY : qt_autogen/mocs_compilation.i
+
+# target to preprocess a source file
+qt_autogen/mocs_compilation.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/qt_autogen/mocs_compilation.cpp.i
+.PHONY : qt_autogen/mocs_compilation.cpp.i
+
+qt_autogen/mocs_compilation.s: qt_autogen/mocs_compilation.cpp.s
+.PHONY : qt_autogen/mocs_compilation.s
+
+# target to generate assembly for a file
+qt_autogen/mocs_compilation.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/qt_autogen/mocs_compilation.cpp.s
+.PHONY : qt_autogen/mocs_compilation.cpp.s
 
 src/aruco.o: src/aruco.cpp.o
 .PHONY : src/aruco.o
@@ -166,29 +266,29 @@ src/aruco.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/aruco.dir/build.make CMakeFiles/aruco.dir/src/aruco.cpp.s
 .PHONY : src/aruco.cpp.s
 
-src/main.o: src/main.cpp.o
-.PHONY : src/main.o
+src/qt.o: src/qt.cpp.o
+.PHONY : src/qt.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/qt.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/src/qt.cpp.o
+.PHONY : src/qt.cpp.o
 
-src/main.i: src/main.cpp.i
-.PHONY : src/main.i
+src/qt.i: src/qt.cpp.i
+.PHONY : src/qt.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/qt.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/src/qt.cpp.i
+.PHONY : src/qt.cpp.i
 
-src/main.s: src/main.cpp.s
-.PHONY : src/main.s
+src/qt.s: src/qt.cpp.s
+.PHONY : src/qt.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/main.dir/build.make CMakeFiles/main.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/qt.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/qt.dir/build.make CMakeFiles/qt.dir/src/qt.cpp.s
+.PHONY : src/qt.cpp.s
 
 # Help Target
 help:
@@ -198,14 +298,24 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... aruco_autogen"
+	@echo "... aruco_autogen_timestamp_deps"
+	@echo "... qt_autogen"
+	@echo "... qt_autogen_timestamp_deps"
 	@echo "... aruco"
-	@echo "... main"
+	@echo "... qt"
+	@echo "... aruco_autogen/mocs_compilation.o"
+	@echo "... aruco_autogen/mocs_compilation.i"
+	@echo "... aruco_autogen/mocs_compilation.s"
+	@echo "... qt_autogen/mocs_compilation.o"
+	@echo "... qt_autogen/mocs_compilation.i"
+	@echo "... qt_autogen/mocs_compilation.s"
 	@echo "... src/aruco.o"
 	@echo "... src/aruco.i"
 	@echo "... src/aruco.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
+	@echo "... src/qt.o"
+	@echo "... src/qt.i"
+	@echo "... src/qt.s"
 .PHONY : help
 
 
