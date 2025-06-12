@@ -68,3 +68,11 @@ dkms.conf
 
 # See Utilities/Sphinx/tutorial_archive.cmake
 /Help/_generated
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+Makefile
+cmake_install.cmake
+compile_commands.json

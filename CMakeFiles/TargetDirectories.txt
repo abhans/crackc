@@ -1,3 +1,0 @@
-/home/abhans/crackc/CMakeFiles/aruco.dir
-/home/abhans/crackc/CMakeFiles/edit_cache.dir
-/home/abhans/crackc/CMakeFiles/rebuild_cache.dir
