@@ -13,8 +13,8 @@ find_package(OpenCV REQUIRED)
 
 include_directories(${OpenCV_INCLUDE_DIRS})
 
-# Link the necessary libraries to source files
-target_link_libraries(aruco ${OpenCV_LIBS}) 
-
 # Generate executables
 add_executable(aruco src/aruco.cpp)
+
+# Link the necessary libraries to executables
+target_link_libraries(aruco ${OpenCV_LIBS}) 

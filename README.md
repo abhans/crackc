@@ -41,7 +41,7 @@ To configure the CMake to generate faster and reliable, it should be configured 
 
 ```bash
 # Configure (generate build system)
-cmake -DCMAKE_BUILD_TYPE=Release .
+cd build && cmake -DCMAKE_BUILD_TYPE=Debug ..
 ```
 
 CMake configuration process can be seen in the terminal:
@@ -54,15 +54,15 @@ CMake configuration process can be seen in the terminal:
 -- Detecting CXX compile features
 -- Detecting CXX compile features - done
 -- Found OpenCV: /usr (found version "4.11.0")
--- Configuring done (1.2s)
+-- Configuring done (1.6s)
 -- Generating done (0.0s)
--- Build files have been written to: /home/abhans/crackc
+-- Build files have been written to: /home/abhans/crackc/build
 ```
 
-Finally, source code can be built:
+Finally, source code can be built from the **root** directory (crackc):
 
 ```bash
-cmake --build .
+cmake --build build --config Debug
 ```
 
 The build process can be seen in the terminal:
