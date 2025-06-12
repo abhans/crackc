@@ -34,7 +34,7 @@ TO prevent Visual Studio Code to rebuild at save, it should be disabled in `.vsc
 To build the project, a `build` directory is needed in the root of the project directory:
 
 ```bash
-mkdir -p build && cd build
+mkdir -p build
 ```
 
 To configure the CMake to generate faster and reliable, it should be configured through available flags:
