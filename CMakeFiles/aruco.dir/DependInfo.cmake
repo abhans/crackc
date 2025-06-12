@@ -8,8 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/abhans/crackc/src/main.cpp" "CMakeFiles/main.dir/src/main.cpp.o" "gcc" "CMakeFiles/main.dir/src/main.cpp.o.d"
-  "" "main" "gcc" "CMakeFiles/main.dir/link.d"
+  "/home/abhans/crackc/src/aruco.cpp" "CMakeFiles/aruco.dir/src/aruco.cpp.o" "gcc" "CMakeFiles/aruco.dir/src/aruco.cpp.o.d"
+  "" "aruco" "gcc" "CMakeFiles/aruco.dir/link.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

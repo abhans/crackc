@@ -1,0 +1,8 @@
+[
+{
+  "directory": "/home/abhans/crackc",
+  "command": "/usr/sbin/c++  -isystem /usr/include/opencv4 -O3 -DNDEBUG -std=gnu++20 -o CMakeFiles/aruco.dir/src/aruco.cpp.o -c /home/abhans/crackc/src/aruco.cpp",
+  "file": "/home/abhans/crackc/src/aruco.cpp",
+  "output": "CMakeFiles/aruco.dir/src/aruco.cpp.o"
+}
+]

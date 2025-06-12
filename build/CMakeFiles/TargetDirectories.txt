@@ -1,8 +1,3 @@
 /home/abhans/crackc/build/CMakeFiles/aruco.dir
-/home/abhans/crackc/build/CMakeFiles/qt.dir
 /home/abhans/crackc/build/CMakeFiles/edit_cache.dir
 /home/abhans/crackc/build/CMakeFiles/rebuild_cache.dir
-/home/abhans/crackc/build/CMakeFiles/aruco_autogen_timestamp_deps.dir
-/home/abhans/crackc/build/CMakeFiles/aruco_autogen.dir
-/home/abhans/crackc/build/CMakeFiles/qt_autogen_timestamp_deps.dir
-/home/abhans/crackc/build/CMakeFiles/qt_autogen.dir
