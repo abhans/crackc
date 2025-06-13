@@ -41,7 +41,7 @@ To configure the CMake to generate faster and reliable, it should be configured 
 
 ```bash
 # Configure (generate build system)
-cd build && cmake -DCMAKE_BUILD_TYPE=Debug ..
+cmake -DCMAKE_BUILD_TYPE=Debug -B build
 ```
 
 CMake configuration process can be seen in the terminal:
