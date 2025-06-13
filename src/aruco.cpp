@@ -20,7 +20,7 @@ int main() {
     // std::cout << "Marker generation is done." << std::endl;
     
     // Read the Demo image for detection
-    cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_GRAYSCALE);
+    cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_COLOR_BGR);
 
     std::vector<int> detectedIds = detectArucoMarkers(img, ARUCO_DICT);
     
@@ -102,6 +102,11 @@ std::vector<int> detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict
     }
 
     std::cout << "Marker/s are detected" << std::endl;
+
+    cv::Mat imgOut = img.clone();
+    // Draw detected markers
+    cv::aruco::drawDetectedMarkers(imgOut, markerCorners, markerIds);
+    cv::imwrite("images/arucodetected.jpg", imgOut);
 
     return markerIds;
 }
