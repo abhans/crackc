@@ -2,27 +2,33 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/objdetect/aruco_detector.hpp>
 
-// Function Signatures
+
 cv::Mat generateArucoMarker(std::string path, cv::aruco::Dictionary arucoDict, int id, int size);
 std::vector<int> detectArucoMarkers(cv::Mat img, cv::aruco::Dictionary arucoDict);
 
 // Constants
-const cv::aruco::Dictionary ARUCO_DICT = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
+const cv::aruco::Dictionary ARUCO_DICT = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
+
+// ---------------------------------------------------- [ MAIN ENTRYPOINT ] ----------------------------------------------------
+// This is the main function that will be executed when the program runs.
 
 int main() {
-    // std::string path = "images";
-    // std::array<int, 10> markerIds {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::string path = "images";
+    std::array<int, 10> markerIds {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     
-    // // Generate markers
-    // for (const auto& id : markerIds) {
-    //     cv::Mat marker = generateArucoMarker(path, ARUCO_DICT, id, 250);
-    // }
-    // std::cout << "Marker generation is done." << std::endl;
+    // Generate markers
+    for (const auto& id : markerIds) {
+        cv::Mat marker = generateArucoMarker(path, ARUCO_DICT, id, 250);
+    }
+    std::cout << "Marker generation is done." << std::endl;
     
     // Read the Demo image for detection
     cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_COLOR_BGR);
 
-    std::vector<int> detectedIds = detectArucoMarkers(img, ARUCO_DICT);
+    std::vector<int> detectedIds = detectArucoMarkers(
+        img,
+        cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250)
+    );
     
     std::cout << "Detected IDs:" << '\n';
     for (const auto& id : detectedIds) {
@@ -32,8 +38,12 @@ int main() {
     return 0;
 }
 
+// ---------------------------------------------------- [ FUNCTION DEFINITIONS ] ----------------------------------------------------
+// Function Definitions for ArUco Marker Generation and Detection
+
+
 /**
- * @brief Generate an ArUco marker image and save it to disk.
+ * Generate an ArUco marker image and save it to disk.
  *
  * This function creates a square marker image using OpenCV's ArUco module.
  * If the provided dictionary is empty, it defaults to DICT_6X6_250.
@@ -64,21 +74,22 @@ cv::Mat generateArucoMarker(std::string path, cv::aruco::Dictionary arucoDict, i
     return marker;
 }
 
+
 /**
- * @brief Detects ArUco markers in the input image.
+ * Detects ArUco markers in the input image.
  *
  * If no dictionary is provided, defaults to DICT_6X6_250. Uses default
  * DetectorParameters for detection.
  *
- * @param[in] img       The input image (cv::Mat) in which to detect markers.
- * @param[in,out] arucoDict
+ * @param img       The input image (`cv::Mat`) in which to detect markers.
+ * @param arucoDict
  *     The ArUco dictionary to use. If empty, it will be replaced with the
- *     default DICT_6X6_250 dictionary.
+ *     default `DICT_6X6_250` dictionary.
  *
- * @return std::vector<int>
+ * @return `std::vector<int>`
  *     ID of the detected markers are returned in the form of an array.
  *
- * @note Currently, the function logs to stdout/stderr whether detection
+ * @note Currently, the function logs to `stdout/stderr` whether detection
  *       succeeded or failed, but does not annotate the image or raise on
  *       failure.
  */
