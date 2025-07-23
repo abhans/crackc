@@ -29,7 +29,7 @@ jobs:
       run: |
         git clone https://github.com/microsoft/vcpkg.git
         ./vcpkg/bootstrap-vcpkg.sh
-        ./vcpkg/vcpkg install opencv4[core,highgui,imgproc,aruco] --triplet x64-linux
+        ./vcpkg/vcpkg install opencv4[core,highgui,aruco] --triplet x64-linux
 
     # Set build output directory
     - name: Set build output directory
