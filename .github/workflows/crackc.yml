@@ -3,7 +3,7 @@ name: CrackC Build and Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "crackc_actions" ]
   pull_request:
     branches: [ "main" ]
 
