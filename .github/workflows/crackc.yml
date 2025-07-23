@@ -25,11 +25,11 @@ jobs:
     - uses: actions/checkout@v4
 
     # Install vcpkg and OpenCV (with Aruco)
-    - name: Install OpenCV (with `vcpkg`)
+    - name: Install OpenCV (with vcpkg)
       run: |
         git clone https://github.com/microsoft/vcpkg.git
         ./vcpkg/bootstrap-vcpkg.sh
-        ./vcpkg/vcpkg install opencv4[core,highgui,aruco] --triplet x64-linux
+        ./vcpkg/vcpkg install opencv4[contrib] --triplet x64-linux
 
     # Set build output directory
     - name: Set build output directory
