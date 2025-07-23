@@ -24,6 +24,13 @@ jobs:
     # Checkout repo
     - uses: actions/checkout@v4
 
+    - name: Install build tools for vcpkg
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt update
+        sudo apt install -y autoconf automake libtool pkg-config
+
+
     # Install vcpkg and OpenCV (with Aruco)
     - name: Install OpenCV (with vcpkg)
       run: |
