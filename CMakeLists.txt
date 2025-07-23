@@ -15,6 +15,8 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 # Generate executables
 add_executable(aruco src/aruco.cpp)
+add_executable(main src/main.cpp)
 
 # Link the necessary libraries to executables
 target_link_libraries(aruco ${OpenCV_LIBS}) 
+target_link_libraries(main ${OpenCV_LIBS}) 
