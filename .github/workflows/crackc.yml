@@ -228,7 +228,7 @@ jobs:
     # Step 6: Upload build artifacts
     # Save the compiled executables so they can be downloaded from GitHub
     - name: Upload executables
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: executables-${{ matrix.os }}-${{ matrix.compiler }}
         path: |
