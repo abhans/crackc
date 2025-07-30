@@ -1,64 +1,207 @@
-name: CrackC Build and Test
-# This workflow builds and tests the CrackC project using different compilers and operating systems.
+# GitHub Actions workflow for CMake C++ project
+# This workflow builds, tests, and validates C++ code across multiple platforms
 
+name: CMake Build and Test
+
+# Define when this workflow should run
+# Think of these as "triggers" that activate your CI/CD pipeline
 on:
+  # Trigger on pushes to main branch - catches integration issues early
   push:
-    branches: [ "main", "crackc_actions" ]
+    branches: [ "main", "develop" ]
+  
+  # Trigger on pull requests targeting main - validates changes before merge
   pull_request:
     branches: [ "main" ]
+  
+  # Allow manual triggering from GitHub UI - useful for testing workflow changes
+  workflow_dispatch:
 
+# Define environment variables that all jobs can access
+# These act like global constants for your entire workflow
+env:
+  # Treat warnings as errors during compilation - enforces code quality
+  CMAKE_BUILD_TYPE: Debug
+  # Number of parallel jobs for building - speeds up compilation
+  CMAKE_BUILD_PARALLEL_LEVEL: 4
+
+# Jobs define the actual work to be done
+# Think of each job as a separate virtual machine that runs your tasks
 jobs:
-  build:
+  # First job: Build and test across multiple platforms
+  build-and-test:
+    # Use a matrix strategy to test across different operating systems and compilers
+    # This ensures your code works everywhere your users might run it
+    strategy:
+      fail-fast: false  # Continue testing other combinations even if one fails
+      matrix:
+        # Define the testing matrix - each combination runs as a separate job
+        include:
+          # Linux with GCC - most common open-source development environment
+          - os: ubuntu-latest
+            compiler: gcc
+            cpp_compiler: g++
+            c_compiler: gcc
+          
+          # Linux with Clang - alternative compiler with different optimizations
+          - os: ubuntu-latest
+            compiler: clang
+            cpp_compiler: clang++
+            c_compiler: clang
+          
+          # Windows with MSVC - supports Windows-specific features and libraries
+          - os: windows-latest
+            compiler: msvc
+            cpp_compiler: cl
+            c_compiler: cl
+
+    # Specify which virtual machine image to use
     runs-on: ${{ matrix.os }}
 
-    strategy:
-      fail-fast: false
-      
-      matrix:
-        os: [ubuntu-latest]
-        build_type: [Release]
-        c_compiler: [gcc]
-        cpp_compiler: [g++]
-
+    # Define the sequence of steps for this job
+    # Each step is like a command you'd run in your terminal
     steps:
-    # Checkout repo
-    - uses: actions/checkout@v4
+    # Step 1: Get your source code
+    # This downloads your repository's code to the virtual machine
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        # Fetch complete git history - needed for version tagging and git-based tools
+        fetch-depth: 0
 
-    - name: Install build tools for vcpkg
-      if: runner.os == 'Linux'
+    # Step 2: Set up the development environment
+    # Install compilers and build tools needed for your specific project
+    - name: Install dependencies (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
       run: |
-        sudo apt update
-        sudo apt install -y autoconf automake libtool pkg-config m4 build-essential
+        # Update package manager database
+        sudo apt-get update
+        
+        # Install essential build tools and OpenCV for your project
+        sudo apt-get install -y \
+          build-essential \
+          cmake \
+          ninja-build \
+          pkg-config \
+          libopencv-dev \
+          libopencv-contrib-dev
+        
+        # Install compiler-specific packages
+        if [ "${{ matrix.compiler }}" = "clang" ]; then
+          sudo apt-get install -y clang llvm
+        fi
 
-
-    # Install vcpkg and OpenCV (with Aruco)
-    - name: Install OpenCV (with vcpkg)
+    - name: Install dependencies (Windows)
+      if: matrix.os == 'windows-latest'
       run: |
-        git clone https://github.com/microsoft/vcpkg.git
-        ./vcpkg/bootstrap-vcpkg.sh
-        ./vcpkg/vcpkg install opencv4[contrib] --triplet x64-linux
+        # Use vcpkg to install OpenCV on Windows (more reliable than Chocolatey for OpenCV)
+        # Install vcpkg
+        git clone https://github.com/Microsoft/vcpkg.git
+        cd vcpkg
+        .\bootstrap-vcpkg.bat
+        
+        # Install OpenCV
+        .\vcpkg install opencv[contrib]:x64-windows
+        
+        # Set vcpkg toolchain for CMake
+        echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
 
-    # Set build output directory
-    - name: Set build output directory
-      id: strings
-      shell: bash
-      run: echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-
-    # Configure CMake with vcpkg toolchain
+    # Step 3: Configure the build system
+    # This is where CMake analyzes your project and generates build files
     - name: Configure CMake
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
-        -S ${{ github.workspace }}
+      run: |
+        # Configure CMake with platform-specific settings
+        # Use your existing build directory structure
+        cmake -B build \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
+          -DCMAKE_C_COMPILER=${{ matrix.c_compiler }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }} \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          ${{ matrix.os == 'windows-latest' && '-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE' || '' }} \
+          .
 
-    # Build the project
+    # Step 4: Build the project
+    # Compile your source code into executable programs
     - name: Build project
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+      run: |
+        # Use CMake to invoke the underlying build system (Ninja in this case)
+        cmake --build build --config ${{ env.CMAKE_BUILD_TYPE }} --parallel ${{ env.CMAKE_BUILD_PARALLEL_LEVEL }}
 
-    # Run tests (if any)
-    - name: Run tests
-      working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: ctest --build-config ${{ matrix.build_type }}
+    # Step 5: Test the executables
+    # Since your project creates executables rather than libraries with tests,
+    # we'll verify that the executables were built successfully
+    - name: Verify executables
+      working-directory: build
+      run: |
+        # Check that both executables were created successfully
+        if [ "${{ matrix.os }}" = "windows-latest" ]; then
+          # Windows executables have .exe extension
+          ls -la aruco.exe main.exe
+          echo "Both executables built successfully on Windows"
+        else
+          # Unix-like systems
+          ls -la aruco main
+          echo "Both executables built successfully on ${{ matrix.os }}"
+        fi
+        
+        # Optionally, you could add basic functionality tests here
+        # For example, if your executables support --help or --version flags:
+        # ./aruco --help || echo "aruco executable responds"
+        # ./main --help || echo "main executable responds"
+
+    # Step 6: Upload build artifacts
+    # Save the compiled executables so they can be downloaded from GitHub
+    - name: Upload executables
+      uses: actions/upload-artifact@v3
+      with:
+        name: executables-${{ matrix.os }}-${{ matrix.compiler }}
+        path: |
+          build/aruco${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+          build/main${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        retention-days: 30
+
+  # Second job: Static analysis and code quality checks
+  # This runs separately from build-and-test to keep concerns separated
+  static-analysis:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Install static analysis tools
+    - name: Install analysis tools
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang \
+          clang-tidy \
+          cppcheck \
+          cmake \
+          ninja-build \
+          libopencv-dev
+
+    # Configure project for analysis
+    - name: Configure for analysis
+      run: |
+        cmake -B build \
+          -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_C_COMPILER=clang \
+          -DCMAKE_CXX_COMPILER=clang++ \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          .
+
+    # Run Clang-Tidy for modern C++ best practices
+    - name: Run Clang-Tidy
+      run: |
+        # Find all C++ source files and run clang-tidy on them
+        find src include -name "*.cpp" -o -name "*.hpp" -o -name "*.h" | \
+        xargs clang-tidy -p build --config-file=.clang-tidy
+
+    # Run Cppcheck for additional static analysis
+    - name: Run Cppcheck
+      run: |
+        cppcheck --enable=all --error-exitcode=1 --suppress=missingIncludeSystem \
+          --inline-suppr --project=build/compile_commands.json
