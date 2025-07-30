@@ -8,7 +8,7 @@ name: CMake Build and Test
 on:
   # Trigger on pushes to main branch - catches integration issues early
   push:
-    branches: [ "main", "crackc_actions" ]
+    branches: [ "main", "develop" ]
   
   # Trigger on pull requests targeting main - validates changes before merge
   pull_request:
@@ -21,7 +21,7 @@ on:
 # These act like global constants for your entire workflow
 env:
   # Treat warnings as errors during compilation - enforces code quality
-  CMAKE_BUILD_TYPE: Debug
+  CMAKE_BUILD_TYPE: Release
   # Number of parallel jobs for building - speeds up compilation
   CMAKE_BUILD_PARALLEL_LEVEL: 4
 
@@ -45,6 +45,12 @@ jobs:
           
           # Linux with Clang - alternative compiler with different optimizations
           - os: ubuntu-latest
+            compiler: clang
+            cpp_compiler: clang++
+            c_compiler: clang
+          
+          # macOS - ensures compatibility with Apple development ecosystem
+          - os: macos-latest
             compiler: clang
             cpp_compiler: clang++
             c_compiler: clang
@@ -77,19 +83,85 @@ jobs:
         # Update package manager database
         sudo apt-get update
         
-        # Install essential build tools and OpenCV for your project
+        # Install essential build tools
         sudo apt-get install -y \
           build-essential \
           cmake \
           ninja-build \
           pkg-config \
-          libopencv-dev \
-          libopencv-contrib-dev
+          wget \
+          unzip \
+          git
         
         # Install compiler-specific packages
         if [ "${{ matrix.compiler }}" = "clang" ]; then
           sudo apt-get install -y clang llvm
         fi
+        
+        # Install OpenCV dependencies
+        sudo apt-get install -y \
+          libgtk2.0-dev \
+          libavcodec-dev \
+          libavformat-dev \
+          libswscale-dev \
+          libtbb2 \
+          libtbb-dev \
+          libjpeg-dev \
+          libpng-dev \
+          libtiff-dev \
+          libdc1394-22-dev \
+          libeigen3-dev \
+          libtheora-dev \
+          libvorbis-dev \
+          libxvidcore-dev \
+          libx264-dev \
+          sphinx-common \
+          libtbb-dev \
+          yasm \
+          libfaac-dev \
+          libmp3lame-dev \
+          libopenjp2-7-dev
+
+    - name: Install dependencies (macOS)
+      if: matrix.os == 'macos-latest'
+      run: |
+        # Use Homebrew to install development tools and OpenCV on macOS
+        brew install cmake ninja pkg-config opencv@4
+
+    - name: Build OpenCV from source (Ubuntu)
+      if: matrix.os == 'ubuntu-latest'
+      run: |
+        # Download and build OpenCV 4.8+ to get the latest ArUco API
+        cd /tmp
+        wget -O opencv.zip https://github.com/opencv/opencv/archive/4.8.1.zip
+        wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.8.1.zip
+        
+        unzip opencv.zip
+        unzip opencv_contrib.zip
+        
+        mkdir -p opencv-4.8.1/build
+        cd opencv-4.8.1/build
+        
+        # Configure OpenCV with contrib modules (includes ArUco)
+        cmake -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=/usr/local \
+          -DOPENCV_EXTRA_MODULES_PATH=/tmp/opencv_contrib-4.8.1/modules \
+          -DBUILD_TESTS=OFF \
+          -DBUILD_PERF_TESTS=OFF \
+          -DBUILD_EXAMPLES=OFF \
+          -DBUILD_DOCS=OFF \
+          -DWITH_TBB=ON \
+          -DWITH_EIGEN=ON \
+          -DOPENCV_ENABLE_NONFREE=ON \
+          ..
+        
+        # Build and install OpenCV (this takes several minutes)
+        ninja -j2  # Use only 2 cores to avoid memory issues
+        sudo ninja install
+        
+        # Update library cache
+        sudo ldconfig
 
     - name: Install dependencies (Windows)
       if: matrix.os == 'windows-latest'
@@ -100,8 +172,8 @@ jobs:
         cd vcpkg
         .\bootstrap-vcpkg.bat
         
-        # Install OpenCV
-        .\vcpkg install opencv[contrib]:x64-windows
+        # Install OpenCV with contrib modules (includes ArUco)
+        .\vcpkg install opencv4[contrib,nonfree]:x64-windows
         
         # Set vcpkg toolchain for CMake
         echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
@@ -110,8 +182,7 @@ jobs:
     # This is where CMake analyzes your project and generates build files
     - name: Configure CMake
       run: |
-        # Configure CMake with platform-specific settings
-        # Use your existing build directory structure
+        # Configure CMake exactly like you do locally
         cmake -B build \
           -G Ninja \
           -DCMAKE_BUILD_TYPE=${{ env.CMAKE_BUILD_TYPE }} \
@@ -120,6 +191,10 @@ jobs:
           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
           ${{ matrix.os == 'windows-latest' && '-DCMAKE_TOOLCHAIN_FILE=$CMAKE_TOOLCHAIN_FILE' || '' }} \
           .
+        
+        # Debug: Show what OpenCV version CMake found
+        echo "=== CMake OpenCV Detection ==="
+        grep -i opencv build/CMakeCache.txt || echo "No OpenCV entries found in CMakeCache.txt"
 
     # Step 4: Build the project
     # Compile your source code into executable programs
@@ -153,7 +228,7 @@ jobs:
     # Step 6: Upload build artifacts
     # Save the compiled executables so they can be downloaded from GitHub
     - name: Upload executables
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: executables-${{ matrix.os }}-${{ matrix.compiler }}
         path: |

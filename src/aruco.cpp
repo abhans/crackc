@@ -23,7 +23,7 @@ int main() {
     std::cout << "Marker generation is done." << std::endl;
     
     // Read the Demo image for detection
-    cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_COLOR_BGR);
+    cv::Mat img = cv::imread("images/arucodemo.jpg", cv::IMREAD_COLOR);
 
     std::vector<int> detectedIds = detectArucoMarkers(
         img,
