@@ -8,7 +8,7 @@ name: CMake Build and Test
 on:
   # Trigger on pushes to main branch - catches integration issues early
   push:
-    branches: [ "main", "develop" ]
+    branches: [ "main", "crackc_actions" ]
   
   # Trigger on pull requests targeting main - validates changes before merge
   pull_request:
