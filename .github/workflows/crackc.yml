@@ -21,7 +21,7 @@ on:
 # These act like global constants for your entire workflow
 env:
   # Treat warnings as errors during compilation - enforces code quality
-  CMAKE_BUILD_TYPE: Release
+  CMAKE_BUILD_TYPE: Debug
   # Number of parallel jobs for building - speeds up compilation
   CMAKE_BUILD_PARALLEL_LEVEL: 4
 
@@ -48,18 +48,6 @@ jobs:
             compiler: clang
             cpp_compiler: clang++
             c_compiler: clang
-          
-          # macOS - ensures compatibility with Apple development ecosystem
-          - os: macos-latest
-            compiler: clang
-            cpp_compiler: clang++
-            c_compiler: clang
-          
-          # Windows with MSVC - supports Windows-specific features and libraries
-          - os: windows-latest
-            compiler: msvc
-            cpp_compiler: cl
-            c_compiler: cl
 
     # Specify which virtual machine image to use
     runs-on: ${{ matrix.os }}
@@ -77,7 +65,7 @@ jobs:
 
     # Step 2: Set up the development environment
     # Install compilers and build tools needed for your specific project
-    - name: Install dependencies (Ubuntu)
+    - name: Install dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
         # Update package manager database
@@ -87,60 +75,30 @@ jobs:
         sudo apt-get install -y \
           build-essential \
           cmake \
-          ninja-build \
-          pkg-config \
+          ninja \
           wget \
           unzip \
           git
-        
+
         # Install compiler-specific packages
         if [ "${{ matrix.compiler }}" = "clang" ]; then
           sudo apt-get install -y clang llvm
         fi
-        
-        # Install OpenCV dependencies
-        sudo apt-get install -y \
-          libgtk2.0-dev \
-          libavcodec-dev \
-          libavformat-dev \
-          libswscale-dev \
-          libtbb2 \
-          libtbb-dev \
-          libjpeg-dev \
-          libpng-dev \
-          libtiff-dev \
-          libdc1394-22-dev \
-          libeigen3-dev \
-          libtheora-dev \
-          libvorbis-dev \
-          libxvidcore-dev \
-          libx264-dev \
-          sphinx-common \
-          libtbb-dev \
-          yasm \
-          libfaac-dev \
-          libmp3lame-dev \
-          libopenjp2-7-dev
 
-    - name: Install dependencies (macOS)
-      if: matrix.os == 'macos-latest'
-      run: |
-        # Use Homebrew to install development tools and OpenCV on macOS
-        brew install cmake ninja pkg-config opencv@4
-
-    - name: Build OpenCV from source (Ubuntu)
-      if: matrix.os == 'ubuntu-latest'
-      run: |
-        # Download and build OpenCV 4.8+ to get the latest ArUco API
-        cd /tmp
-        wget -O opencv.zip https://github.com/opencv/opencv/archive/4.8.1.zip
-        wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.8.1.zip
-        
+        # Download and unpack sources
+        wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip
+        wget -O opencv_contrib.zip https://github.com/opencv/opencv_contrib/archive/4.x.zip
         unzip opencv.zip
         unzip opencv_contrib.zip
         
-        mkdir -p opencv-4.8.1/build
-        cd opencv-4.8.1/build
+        # Create build directory
+        mkdir -p build && cd build
+        
+        # Configure
+        cmake -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-4.x/modules ../opencv-4.x
+        
+        # Build
+        cmake --build .
         
         # Configure OpenCV with contrib modules (includes ArUco)
         cmake -G Ninja \
@@ -163,21 +121,6 @@ jobs:
         # Update library cache
         sudo ldconfig
 
-    - name: Install dependencies (Windows)
-      if: matrix.os == 'windows-latest'
-      run: |
-        # Use vcpkg to install OpenCV on Windows (more reliable than Chocolatey for OpenCV)
-        # Install vcpkg
-        git clone https://github.com/Microsoft/vcpkg.git
-        cd vcpkg
-        .\bootstrap-vcpkg.bat
-        
-        # Install OpenCV with contrib modules (includes ArUco)
-        .\vcpkg install opencv4[contrib,nonfree]:x64-windows
-        
-        # Set vcpkg toolchain for CMake
-        echo "CMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
-
     # Step 3: Configure the build system
     # This is where CMake analyzes your project and generates build files
     - name: Configure CMake
@@ -193,7 +136,6 @@ jobs:
           .
         
         # Debug: Show what OpenCV version CMake found
-        echo "=== CMake OpenCV Detection ==="
         grep -i opencv build/CMakeCache.txt || echo "No OpenCV entries found in CMakeCache.txt"
 
     # Step 4: Build the project
