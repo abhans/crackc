@@ -1,9 +1,5 @@
 #include <iostream>
-#include <opencv2/opencv.hpp>
 #include <string>
-
-/* OpenCV Version */
-const std::string OPENCV_VERSION = cv::getVersionString();
 
 // Usage of "this" for Classes
 class Person {
@@ -37,7 +33,6 @@ class Person {
 };
 
 int main() {
-    std::cout << "OpenCV: " << OPENCV_VERSION << std::endl;
     Person personMe;
     personMe.setAge(25);
     personMe.setName("Bilgehan");
