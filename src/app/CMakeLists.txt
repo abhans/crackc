@@ -1,14 +1,11 @@
-add_executable(app
+add_executable(avisys
     main.cpp
-    # other source files for UI, etc.
+    MainWindow.cpp
 )
 
-target_link_libraries(app
+target_link_libraries(avisys
     PRIVATE
         core
-        vision
-        image
-        robotics
         Qt6::Widgets
-        ${OpenCV_LIBS}   # if app links OpenCV directly
+        ${OpenCV_LIBS}
 )

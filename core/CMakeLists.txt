@@ -1,13 +1,15 @@
-add_library(core
-    # src/*.cpp ...
-)
+# Add subdirectories for internal modules
+add_subdirectory(vision)
+add_subdirectory(image)
+add_subdirectory(robotics)
 
-target_include_directories(core
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-# Link external libs if core needs them
+# Create a core library
+add_library(core INTERFACE)
+
+# Link all internal modules to core
 target_link_libraries(core
-    PUBLIC
-        ${OpenCV_LIBS}   # if core uses OpenCV
+    INTERFACE
+        vision
+        image
+        robotics
 )
