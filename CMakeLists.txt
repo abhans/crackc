@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.25)
 
-project(avisys LANGUAGES CXX)
+project(avisys VERSION 0.1 LANGUAGES CXX)
 
 # Modern C++ standard
 set(CMAKE_CXX_STANDARD 23)
@@ -15,8 +15,8 @@ set(CMAKE_AUTORCC ON)
 
 # Package: OpenCV
 find_package(OpenCV REQUIRED)
-include_directories(${OpenCV_INCLUDE_DIRS})
 
-# Add subdirectories
-add_subdirectory(core)
-add_subdirectory(src/app)
+add_executable(avisys src/main.cpp)
+
+target_include_directories(avisys PRIVATE ${OpenCV_INCLUDE_DIRS})
+target_link_libraries(avisys PRIVATE ${OpenCV_LIBS} Qt6::Widgets)
