@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 
+class QLabel;
+class QWidget;
+
 namespace avi::app {
 
 class MainWindow : public QMainWindow {
@@ -12,6 +15,10 @@ class MainWindow : public QMainWindow {
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override = default;
+
+private:
+    QWidget* wCentralWidget { nullptr };
+    QLabel*  wLabel         { nullptr };
 };
 
 }
