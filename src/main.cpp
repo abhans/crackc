@@ -1,7 +1,13 @@
+#include <iostream>
 #include <QFont>
 #include <QApplication>
 
+#include "io/Logger.h"
 #include "app/MainWindow.h"
+
+using namespace avi;
+
+io::Logger logger("logs/main.log");
 
 int main(int argc, char *argv[]) {
     QApplication app(argc, argv);
@@ -10,8 +16,10 @@ int main(int argc, char *argv[]) {
     font.setPointSize(10);
     app.setFont(font);
 
-    avi::app::MainWindow window;
+    app::MainWindow window;
     window.show();
+
+    logger.log(io::Level::INFO, "Application has started.");
 
     return app.exec();
 }

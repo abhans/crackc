@@ -21,6 +21,7 @@ qt_standard_project_setup()
 qt_add_executable(avisys
     src/main.cpp
     include/app/MainWindow.cpp
+    include/io/Logger.cpp
     # Add other source files here
 )
 
