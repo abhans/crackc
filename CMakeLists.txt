@@ -18,11 +18,12 @@ find_package(OpenCV REQUIRED)
 
 qt_standard_project_setup()
 
+# Glob all source files inside include directory
+file(GLOB_RECURSE SOURCES "include/**/*.cpp")
+
 qt_add_executable(avisys
     src/main.cpp
-    include/app/MainWindow.cpp
-    include/io/Logger.cpp
-    # Add other source files here
+    ${SOURCES}
 )
 
 target_include_directories(avisys
