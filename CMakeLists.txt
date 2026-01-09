@@ -1,33 +1,31 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.16)
 
-project(avisys VERSION 0.1 LANGUAGES CXX)
+project(NotesApp VERSION 0.1 LANGUAGES CXX)
 
-# Modern C++ standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Package: Qt6
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTORCC ON)
-
-# Package: OpenCV
-find_package(OpenCV REQUIRED)
+find_package(Qt6 6.2 REQUIRED COMPONENTS Quick Qml)
 
 qt_standard_project_setup()
 
-qt_add_executable(avisys
+# Defining the executable and C++ source files
+qt_add_executable(appNotesApp
     src/main.cpp
-    include/app/MainWindow.cpp
-    include/io/Logger.cpp
-    # Add other source files here
+    src/NoteModel.cpp
+    src/NoteModel.h
+    src/Note.h
 )
 
-target_include_directories(avisys
-    PRIVATE 
-    "${PROJECT_SOURCE_DIR}/include"
+# Defining the QML Module
+qt_add_qml_module(appNotesApp
+    URI "App"
+    VERSION 1.0
+    QML_FILES
+        content/Main.qml
 )
 
-target_link_libraries(avisys PRIVATE ${OpenCV_LIBS} Qt6::Widgets)
+# Linking libraries
+target_link_libraries(appNotesApp
+    PRIVATE Qt6::Quick Qt6::Qml
+)

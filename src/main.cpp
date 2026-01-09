@@ -1,25 +1,24 @@
-#include <iostream>
-#include <QFont>
-#include <QApplication>
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
-#include "io/Logger.h"
-#include "app/MainWindow.h"
+#include "NoteModel.h"
 
-using namespace avi;
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
 
-io::Logger logger("logs/main.log");
+    qmlRegisterType<NoteModel>("App", 1, 0, "NoteModel");
 
-int main(int argc, char *argv[]) {
-    QApplication app(argc, argv);
+    QQmlApplicationEngine engine;
 
-    QFont font("JetBrains Mono");
-    font.setPointSize(10);
-    app.setFont(font);
+    const QUrl url(QStringLiteral("qrc:/App/content/Main.qml"));
+    
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl) { QCoreApplication::exit(-1); }
+    }, Qt::QueuedConnection);
 
-    app::MainWindow window;
-    window.show();
-
-    logger.log(io::Level::INFO, "Application has started.");
+    engine.load(url);
 
     return app.exec();
 }
